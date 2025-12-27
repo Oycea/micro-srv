@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: booking_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  flight_service:
+    build: ./flight_srv
+    container_name: flight_service
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/booking_db
+    ports:
+      - "8001:8001"
+
+  booking_service:
+    build: ./booking_srv
+    container_name: booking_service
+    restart: always
+    depends_on:
+      - db
+      - flight_service
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/booking_db
+      FLIGHT_SERVICE_URL: http://flight_service:8001
+    ports:
+      - "8000:8000"
+
+volumes:
+  db_data:

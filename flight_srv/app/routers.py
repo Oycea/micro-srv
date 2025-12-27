@@ -13,7 +13,8 @@ flight_router = APIRouter(prefix="/flights", tags=["Flights"])
 @flight_router.post(
     "/create",
     response_model=FlightResponse,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    name="Создать рейс"
 )
 def create_flight(flight: FlightCreate):
     try:
@@ -57,7 +58,8 @@ def create_flight(flight: FlightCreate):
         raise HTTPException(500, str(ex))
 
 
-@flight_router.post("/{flight_id}/reserve")
+@flight_router.post("/{flight_id}/reserve",
+                    name="Забронировать места")
 def reserve_seats(flight_id: UUID, request: SeatsRequest):
     """
     Резервирование конкретных мест
@@ -126,7 +128,7 @@ def get_flight_by_id(flight_id: UUID):
 
 
 @flight_router.get("/search", response_model=FlightResponse,
-                   name="Получить ID о рейса по номеру и дате")
+                   name="Получить ID рейса по номеру и дате")
 def get_flight_id_by_name_and_date(
         flight_number: str = Query(..., description="Номер рейса"),
         departure_date: str = Query(..., description="Дата отправления в формате YYYY-MM-DD")):

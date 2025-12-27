@@ -1,11 +1,10 @@
 from fastapi import APIRouter, HTTPException, status, Path
 
 import os
+import requests
+
 from .schemas import BookingCreate, BookingResponse
 from .db_connection import get_connection
-from .flight_client import get_flight, reserve_seats
-
-import requests
 
 booking_router = APIRouter(prefix="/bookings", tags=["Bookings"])
 FLIGHT_SERVICE_URL = os.getenv("FLIGHT_SERVICE_URL")
