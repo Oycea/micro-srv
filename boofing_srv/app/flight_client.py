@@ -14,7 +14,8 @@ def get_flight(flight_id):
 def reserve_seats(flight_id, seats):
     r = requests.post(
         f"{FLIGHT_SERVICE_URL}/flights/{flight_id}/reserve",
-        params={"seats": seats}
+        json={"seats_to_book": seats},
+        timeout=5
     )
     if r.status_code != 200:
         return False, r.json().get("detail")

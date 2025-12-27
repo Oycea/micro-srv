@@ -13,6 +13,10 @@ class SeatMap(BaseModel):
     seats: List[Seat]
 
 
+class SeatsRequest(BaseModel):
+    seats_to_book: List[str]
+
+
 class FlightBase(BaseModel):
     flight_number: str
     origin: str
@@ -29,9 +33,3 @@ class FlightCreate(FlightBase):
 
 class FlightResponse(FlightBase):
     id: UUID
-
-
-class FlightInfoResponse(BaseModel):
-    id: UUID
-    flight_number: str
-    departure_time: datetime
